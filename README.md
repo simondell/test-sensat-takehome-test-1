@@ -6,7 +6,9 @@ Please see the notes at the end for the [original test spec](#spec).
 
 1. I shall use React, rather than Angular. I havn't used Angular since v1.4ish, >5 years ago. I have used React extensively. I don't have time nor the will to learn modern Angular to production level for this test; also the internal recruiter seemed content to accept a React-based solution
 2. I'll use create-react-app to scaffold the project: testing with Jest & react-testing-library, linting, good TS support, a dev server with HMR, sane CSS defaults etc... plus this has been my toolset the last >2 years.
-
+3. The JSON file has >8000 entries, as individual lines, not wrapped in an array. The file wouldn't pass JSON validation. It's a lot of data to fetch in one call (although about the size of a high quality photo or low quality pop song as an MP3, so it's not _that_ big). The test suggests plotting graphs of sensor data over time, which would benefit from "lots" of data, so perhaps it's fine as it is. Initially I shall pull a handful of lines out to use in a mock, to develop against. Then I'll wrap the whole lot in a single array and fetch it in one go. This isn't a mock of public data, it's a mock of internal data, so I'd be able to negotiate things like "wrapping in an array" or "page sizes" from the back-end team. If it becomes unweildy and if I feel I have time, I'll look into an API to deliver pages of data. 
+4. Oh yeah: indent with 2 spaces; don't use semi-colons
+5. 
 
 # <a id="spec">Original test spec: Angular Programming Exercise</a>
 
