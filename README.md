@@ -8,7 +8,7 @@ Please see the notes at the end for the [original test spec](#spec).
 2. I'll use create-react-app to scaffold the project: testing with Jest & react-testing-library, linting, good TS support, a dev server with HMR, sane CSS defaults etc... plus this has been my toolset the last >2 years.
 3. The JSON file has >8000 entries, as individual lines, not wrapped in an array. The file wouldn't pass JSON validation. It's a lot of data to fetch in one call (although about the size of a high quality photo or low quality pop song as an MP3, so it's not _that_ big). The test suggests plotting graphs of sensor data over time, which would benefit from "lots" of data, so perhaps it's fine as it is. Initially I shall pull a handful of lines out to use in a mock, to develop against. Then I'll wrap the whole lot in a single array and fetch it in one go. This isn't a mock of public data, it's a mock of internal data, so I'd be able to negotiate things like "wrapping in an array" or "page sizes" from the back-end team. If it becomes unweildy and if I feel I have time, I'll look into an API to deliver pages of data. 
 4. Oh yeah: indent with 2 spaces; don't use semi-colons
-5. 
+5. The test spec claims the `id` field contains a UUID of a sensor reading. This doesn't match the data in the collection. In the collection, the `id` appears to contains an id of a sensor in a particular box. Thus multiple entries in the collection have matching `id` values: indicating multiple readings from a single sensor. These cannot be used as UUIDs.
 
 # <a id="spec">Original test spec: Angular Programming Exercise</a>
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import DataTable from '../DataTable/DataTable'
 import './App.css'
 
 const mockData = [
@@ -15,6 +16,9 @@ function App() {
       <header className="App-header">
         <h1>Sensat take-home test 1</h1>
       </header>
+      <DataTable
+        data={mockData}
+      />
     </div>
   )
 }
