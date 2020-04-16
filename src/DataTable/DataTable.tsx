@@ -1,10 +1,21 @@
 import React from 'react';
 
-interface DataTableProps {
+export interface ColumnProps {
+  field: string
+  heading: string
+  sortable?: boolean
+}
+
+export function Column (props: ColumnProps) {
+  return null
+}
+
+export interface DataTableProps {
+  children?: React.ReactElement<ColumnProps>[] | React.ReactElement<ColumnProps>
   data: any[]
 }
 
-export default function DataTable (props: DataTableProps) {
+export function DataTable (props: DataTableProps) {
   return (
     <table>
       <thead>
