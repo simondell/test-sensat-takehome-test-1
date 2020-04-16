@@ -1,4 +1,14 @@
-# Angular Programming Exercise
+# Sensat programming exercise
+
+Please see the notes at the end for the [original test spec](#spec).
+
+## Decision log
+
+1. I shall use React, rather than Angular. I havn't used Angular since v1.4ish, >5 years ago. I have used React extensively. I don't have time nor the will to learn modern Angular to production level for this test; also the internal recruiter seemed content to accept a React-based solution
+2. I'll use create-react-app to scaffold the project: testing with Jest & react-testing-library, linting, good TS support, a dev server with HMR, sane CSS defaults etc... plus this has been my toolset the last >2 years.
+
+
+# <a id="spec">Original test spec: Angular Programming Exercise</a>
 
 Some environmental sensors have been deployed on the field.
 There are various types of sensors (CO, Temperature, O3, SO2, Humidity, …).
