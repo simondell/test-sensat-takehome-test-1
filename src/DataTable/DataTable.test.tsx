@@ -11,16 +11,14 @@ const mockData = [
 ]
 
 test('renders a row per entry in the supplied data', () => {
-  const { getByText } = render(
+  const tree = render(
     <DataTable
       data={mockData}
     />
   )
 
-  for(const row of mockData) {
-    const cell = getByText(new RegExp(row.name))
-    expect(cell).toBeInTheDocument()
-  }
+  const rows = tree.getAllByRole('row')
+  expect(rows.length).toEqual(mockData.length + 1)
 })
 
 test('Columns specify fields and fieldnames', () => {
@@ -42,5 +40,14 @@ test('Columns specify fields and fieldnames', () => {
       />
     </DataTable>
   )
+
+  const renderedHeadings = tree.getAllByRole('columnheader')
+  expect(renderedHeadings.length).toEqual(3)
+
+  const headings = ['Sensor ID', 'Reading', 'Timestamp']
+  headings.forEach(heading => {
+    const found = tree.getByText(heading)
+    expect(found).toBeInTheDocument()
+  })
 })
 

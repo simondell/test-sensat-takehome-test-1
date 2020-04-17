@@ -1,35 +1,52 @@
 import React from 'react';
 
-export interface ColumnProps {
+interface ColumnProps {
   field: string
   heading: string
   sortable?: boolean
 }
 
-export function Column (props: ColumnProps) {
-  return null
+export function Column (props: ColumnProps): React.ReactElement {
+  return <th>{props.heading}</th>
 }
 
-export interface DataTableProps {
-  children?: React.ReactElement<ColumnProps>[] | React.ReactElement<ColumnProps>
-  data: any[]
+interface DataTableProps {
+  children?: React.ReactElement<ColumnProps>[] | React.ReactElement<ColumnProps> | undefined
+  data: object[]
 }
 
 export function DataTable (props: DataTableProps) {
+  const fields = React.Children.map(
+    props.children,
+    child => child && child.props.field
+  )
+
   return (
     <table>
       <thead>
         <tr>
-          <th>heading</th>
+        {
+          props.children
+        }
         </tr>
       </thead>
       <tbody>
       {
-        props.data.map((item: any) =>
+        props.data.map((item: any, rowIndex:  number) =>
           <tr
             key={`${item.id}-${item.reading_ts}`}
           >
-            <td>{item.name}</td>
+          {
+            fields && fields.map((fieldName: string) =>
+              <td
+                key={`cell-${rowIndex}-${fieldName}`}
+              >
+              {
+                item[fieldName]
+              }
+              </td>
+            )
+          }
           </tr>
         )
       }
