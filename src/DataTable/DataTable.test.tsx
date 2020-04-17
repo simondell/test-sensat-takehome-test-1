@@ -40,5 +40,14 @@ test('Columns specify fields and fieldnames', () => {
       />
     </DataTable>
   )
+
+  const renderedHeadings = tree.getAllByRole('columnheader')
+  expect(renderedHeadings.length).toEqual(3)
+
+  const headings = ['Sensor ID', 'Reading', 'Timestamp']
+  headings.forEach(heading => {
+    const found = tree.getByText(heading)
+    expect(found).toBeInTheDocument()
+  })
 })
 
