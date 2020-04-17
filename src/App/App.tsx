@@ -1,5 +1,8 @@
 import React from 'react'
-import { DataTable } from '../DataTable/DataTable'
+import {
+  Column,
+  DataTable,
+} from '../DataTable/DataTable'
 import './App.css'
 
 const mockData = [
@@ -18,7 +21,16 @@ function App() {
       </header>
       <DataTable
         data={mockData}
-      />
+      >
+        <Column
+          field="id"
+          heading="i.d."
+        />
+        <Column
+          field="reading"
+          heading="Reading"
+        />
+      </DataTable>
     </div>
   )
 }
