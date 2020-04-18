@@ -39,17 +39,17 @@ export function Column (props: ColumnProps): React.ReactElement {
   // )
 }
 
-type Dictionary = {
+type Comparable = {
   [key: string]: any
 }
 
-function byKey<T> (
-  key: keyof T,
+function byKey (
+  key: string,
   direction: SortOrder,
-): Function {
-  return (first: T, second: T): number => {
-    const firstProp: any = first[key]
-    const secondProp: any = second[key]
+) {
+  return (first: Comparable, second: Comparable): number => {
+    const firstProp = first[key]
+    const secondProp = second[key]
 
     if(firstProp < secondProp) {
       return direction === SortOrder.Ascending
