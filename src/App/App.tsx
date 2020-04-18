@@ -47,7 +47,7 @@ function App() {
         <Column
           field="sensor_type"
           heading="Sensor"
-          sortable={true}
+          sortable
         />
         <Column
           field="reading"
@@ -60,6 +60,7 @@ function App() {
         <Column
           field="reading_ts"
           heading="Date &amp; time"
+          sortable
         />
       </DataTable>
     </div>

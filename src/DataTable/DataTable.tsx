@@ -17,25 +17,36 @@ interface ColumnProps {
   field: string
   heading: string
   sortable?: boolean
-  setSort?: React.Dispatch<React.SetStateAction<SortSetting>>
-  // sortBy: (field: string, direction: SortOrder) => void
+}
+
+interface SortableColumnProps extends ColumnProps{
+  sort: SortSetting
+  setSort: React.Dispatch<React.SetStateAction<SortSetting>>
 }
 
 export function Column (props: ColumnProps): React.ReactElement {
-  if(!props.sortable) {
-    return <th>{props.heading}</th>
+  return <th>{props.heading}</th>
+}
+
+function SortableColumn (props: SortableColumnProps): React.ReactElement {
+  function createClickHandler (direction: SortOrder) {
+    if(props.sort && props.sort[0] === props.field) {
+      return () => { props.setSort(null) }
+    }
+
+    return () => { props.setSort([props.field, direction]) }
   }
 
   return (
     <th>
       <span>{props.heading}</span>
       <button
-        onClick={() => props.setSort && props.setSort([props.field, SortOrder.Ascending])}
+        onClick={createClickHandler(SortOrder.Ascending)}
         title={`Ascending sort by ${props.field}`}
         type="button"
       >🔼</button>
       <button
-        onClick={() => props.setSort && props.setSort([props.field, SortOrder.Descending])}
+        onClick={createClickHandler(SortOrder.Descending)}
         title={`Descending sort by ${props.field}`}
         type="button"
       >🔽</button>
@@ -80,17 +91,19 @@ type SortSpec = [string, SortOrder]
 type SortSetting = SortSpec | null
 
 export function DataTable (props: DataTableProps) {
-  const fields = React.Children.map(
-    props.children,
-    child => child && child.props.field
-  )
-
   const [sort, setSort] = useState(null as SortSetting)
 
   const columns = React.Children.map(
     props.children,
     child => child.props.sortable
-      ? React.cloneElement(child, { ...child.props, setSort })
+      ? (
+        <SortableColumn
+          field={child.props.field}
+          heading={child.props.heading}
+          sort={sort as SortSpec}
+          setSort={setSort}
+        />
+      )
       : child
   )
 
@@ -106,11 +119,7 @@ export function DataTable (props: DataTableProps) {
   return (
     <table>
       <thead>
-        <tr>
-        {
-          columns
-        }
-        </tr>
+        <tr>{columns}</tr>
       </thead>
       <tbody>
       {
