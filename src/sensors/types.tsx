@@ -1,4 +1,4 @@
-export interface Record {
+export interface SensorRecord {
   id: string // "Box-A1-O3",
   box_id: string // "Box-A1",
   sensor_type: string // "O3",
