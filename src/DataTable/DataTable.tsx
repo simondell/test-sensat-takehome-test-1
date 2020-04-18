@@ -43,11 +43,11 @@ type Comparable = {
   [key: string]: any
 }
 
-function byKey (
-  key: string,
-  direction: SortOrder,
+function bySpec (
+  spec: SortSpec
 ) {
   return (first: Comparable, second: Comparable): number => {
+    const [key, direction] = spec
     const firstProp = first[key]
     const secondProp = second[key]
 
@@ -72,7 +72,8 @@ interface DataTableProps {
   data: object[]
 }
 
-type SortSpec = [string, SortOrder] | null
+type SortSpec = [string, SortOrder]
+type SortSetting = SortSpec | null
 
 export function DataTable (props: DataTableProps) {
   const fields = React.Children.map(
@@ -80,12 +81,12 @@ export function DataTable (props: DataTableProps) {
     child => child && child.props.field
   )
 
-  const spec: SortSpec = ['sensor_type', SortOrder.Ascending]
+  const spec: SortSetting = ['sensor_type', SortOrder.Ascending]
 
   let sortedData
   if(spec) {
     sortedData = [...props.data]
-    sortedData.sort(byKey(spec[0], spec[1]))
+    sortedData.sort(bySpec(spec))
   }
   else {
     sortedData = props.data
