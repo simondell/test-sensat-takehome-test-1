@@ -47,6 +47,7 @@ function App() {
         <Column
           field="sensor_type"
           heading="Sensor"
+          // sortable={true}
         />
         <Column
           field="reading"
