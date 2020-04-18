@@ -16,27 +16,31 @@ enum Comparison {
 interface ColumnProps {
   field: string
   heading: string
-  // sortable?: boolean
+  sortable?: boolean
+  setSort?: React.Dispatch<React.SetStateAction<SortSetting>>
   // sortBy: (field: string, direction: SortOrder) => void
 }
 
 export function Column (props: ColumnProps): React.ReactElement {
+  if(!props.sortable) {
     return <th>{props.heading}</th>
-  // if(!props.sortable) {
-  // }
-  // return (
-  //   <th>
-  //     {props.heading}
-  //     <button
-  //       type="button"
-  //       onClick={() => {}}
-  //     >🔼</button>
-  //     <button
-  //       type="button"
-  //       onClick={() => {}}
-  //     >🔽</button>
-  //   </th>
-  // )
+  }
+
+  return (
+    <th>
+      <span>{props.heading}</span>
+      <button
+        onClick={() => props.setSort && props.setSort([props.field, SortOrder.Ascending])}
+        title={`Ascending sort by ${props.field}`}
+        type="button"
+      >🔼</button>
+      <button
+        onClick={() => props.setSort && props.setSort([props.field, SortOrder.Descending])}
+        title={`Descending sort by ${props.field}`}
+        type="button"
+      >🔽</button>
+    </th>
+  )
 }
 
 type Comparable = {
@@ -68,7 +72,7 @@ function bySpec (
 }
 
 interface DataTableProps {
-  children?: React.ReactElement<ColumnProps>[] | React.ReactElement<ColumnProps> | undefined
+  children: React.ReactElement<ColumnProps>[] | React.ReactElement<ColumnProps>
   data: object[]
 }
 
@@ -81,12 +85,19 @@ export function DataTable (props: DataTableProps) {
     child => child && child.props.field
   )
 
-  const spec: SortSetting = ['sensor_type', SortOrder.Ascending]
+  const [sort, setSort] = useState(null as SortSetting)
+
+  const columns = React.Children.map(
+    props.children,
+    child => child.props.sortable
+      ? React.cloneElement(child, { ...child.props, setSort })
+      : child
+  )
 
   let sortedData
-  if(spec) {
+  if(sort) {
     sortedData = [...props.data]
-    sortedData.sort(bySpec(spec))
+    sortedData.sort(bySpec(sort))
   }
   else {
     sortedData = props.data
@@ -97,26 +108,30 @@ export function DataTable (props: DataTableProps) {
       <thead>
         <tr>
         {
-          props.children
+          columns
         }
         </tr>
       </thead>
       <tbody>
       {
-        sortedData.map((item: any, rowIndex:  number) =>
+        sortedData.map((row: any, rowIndex:  number) =>
           <tr
-            key={`${item.id}-${item.reading_ts}`}
+            key={`${row.id}-${row.reading_ts}`}
           >
           {
-            fields && fields.map((fieldName: string) =>
+            columns && 
+            columns.map(column => {
+              const { field } = column.props
+              return (
                 <td
-                  key={`cell-${rowIndex}-${fieldName}`}
+                  key={`cell-${rowIndex}-${field}`}
                 >
                 {
-                  item[fieldName]
+                  row[field]
                 }
                 </td>
               )
+            })
           }
           </tr>
         )
