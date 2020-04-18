@@ -43,18 +43,13 @@ type Dictionary = {
   [key: string]: any
 }
 
-function byKey (
-  key: string,
+function byKey<T> (
+  key: keyof T,
   direction: SortOrder,
-  keyConstructor?: Function
-) {
-  return (first: object, second: object): number => {
-    const firstProp: any = keyConstructor
-      ? keyConstructor(first[key])
-      : first[key]
-    const secondProp: any = keyConstructor
-      ? keyConstructor(second[key])
-      : second[key]
+): Function {
+  return (first: T, second: T): number => {
+    const firstProp: any = first[key]
+    const secondProp: any = second[key]
 
     if(firstProp < secondProp) {
       return direction === SortOrder.Ascending
