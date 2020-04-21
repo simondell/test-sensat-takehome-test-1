@@ -1,9 +1,20 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import App from './App';
+import React from 'react'
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from '@testing-library/react'
+import { enableFetchMocks } from 'jest-fetch-mock'
 
-test('renders a header referencing Sensat', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/Sensat/i);
-  expect(linkElement).toBeInTheDocument();
-});
+import App from './App'
+
+enableFetchMocks()
+
+test('displays Loading whilst it loads', async () => {
+  fetchMock.mockResponse(JSON.stringify([{ id: 'foo' }]))
+  render(<App />)
+
+  expect(fetchMock).toHaveBeenCalled()
+
+  await waitForElementToBeRemoved(() => screen.getByText(/loading/i))
+})

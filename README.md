@@ -13,10 +13,37 @@ Please see the notes at the end for the [original test spec](#spec).
 7. I thought React Context might help define the table specification (which headers label columns of keys of model data). However, I got lost in a mess of type definitions trying to make this work. It's also too much engineering for this stage. I stripped it back to use arrays of variables, not even useState as I currently don't see a need to maintain state. I'll leave that open 'til later in the test.
 8. Basic tests for table operation find rows per data entry, and columns per Column child. I could get more complex and specific--checking the cells hold the data you'd expect to see... but I would rather move on.
 9. Typing is hard. I spent way longer than expected trying to get the type of `bySpec()` (and its predescessor `byKey()`) brief yet descriptive. I'm fairly sure I tried the current typing and was told it didn't work by the compilor, at one point. There were two interacting factors: it needed to return a function of type which would match the comparator of `Array.prototype.sort()`, but also allow me to index arbitrarily through properties of the arguments which would be passed to the comparator. I invented a type which allowed indexing by string key through an array. I also created a `<SortableColumn/>` with the extra props needed for sorting. I elected not to export this so that  `<Column sortable />` will work as interface enough. The DataTable decides whether to render `<SortableColumn />`s in place of `<Column/>`s. This allowed me to skip checking whether every sort-related prop had been passed to the `<Column>`. 
+10. App should request data from the server. Wrote a basic `useEffect()` to fetch from localhost. Many, many issues:
+
+    *  `fetch()` needs mocking; there's a few helpers. Most blogs suggest jest-fetch-mock when also working in TS.
+    *  The docs on how to use the `jest-fetch-mock` in tests are full of confusion. Do you need to import it into the test set-up or not? Do you need to `enableFetchMocks()`? I settled on my individual test script importing lib.enableFetchMocks and running it explicitly. This seemed to make `fetchMock` available in the scope of the tests.
+    *  Because the `useEffect()` callback is called immediately, and the useState setters get set after fetch returns, state updates happen after the simple render tests completes. This causes React to warn that we should use `act()`, but the docs for react-testing-library tell us we shouldn't need `act()` in most cases. They have two approaches: use the built in `waitforX` functions to wait for things like loading spinners to be removed, or mock the promise returned from the external API call. I tried the latter because I didn't want to get into rendering spinners at this point, but I couldn't get the shape/typing of the mock response correct. It had taken me about 3 hours of reading and testing different approaches because I wanted to learn how to do it, but in the end I gave up and added in a brittle spinner. I'm not convinced by react-testing-library yet. It makes hard things even harder. I get that I now have a test that proves my component responds to the API request and that is a "better reflection of live", but this test WILL break when I update the (currently text-only) spinner. This is the exact reason other frameworks advise NOT testing markup.
 
 ## Notes
 
-Specify allowed children: https://stackoverflow.com/questions/44475309/how-do-i-restrict-the-type-of-react-children-in-typescript-using-the-newly-adde/49408900#49408900
+Specify allowed type of children: https://stackoverflow.com/questions/44475309/how-do-i-restrict-the-type-of-react-children-in-typescript-using-the-newly-adde/49408900#49408900
+
+Dynamically assign values to objects, in typescript: https://stackoverflow.com/questions/12710905/how-do-i-dynamically-assign-properties-to-an-object-in-typescript
+
+Typing state: https://www.carlrippon.com/typed-usestate-with-typescript/
+
+Typing Context: https://rjzaworski.com/2018/05/react-context-with-typescript
+
+Update context from within a child: https://stackoverflow.com/questions/41030361/how-to-update-react-context-from-inside-a-child-component
+
+Remind myself how to sort: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+
+Default element role types: https://github.com/A11yance/aria-query#elements-to-roles
+
+Mock Fetch: https://github.com/jefflau/jest-fetch-mock#api
+
+Testing hooks: https://blog.logrocket.com/a-quick-guide-to-testing-react-hooks-fa584c415407/
+
+Jest tips, but w/out TypeScript: https://blog.sapegin.me/all/react-testing-3-jest-and-react-testing-library/
+
+Avoid the `act()` warning: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning
+
+Response: https://developer.mozilla.org/en-US/docs/Web/API/Response
 
 
 

@@ -1,4 +1,7 @@
-import React from 'react'
+import React, {
+  useEffect,
+  useState,
+} from 'react'
 import {
   Column,
   DataTable,
@@ -31,14 +34,46 @@ const mockData = [
   {"id": "Box-A1-CO", "box_id": "Box-A1", "sensor_type": "CO", "unit": "ppm", "name": "Carbon monoxide", "range_l": 0.0, "range_u": 1000.0, "longitude": -0.06507, "latitude": 51.51885, "reading": 917, "reading_ts": "2019-09-10T00:30:00"},
 ]
 
+interface Record {
+  id: string // "Box-A1-CO",
+  box_id: string // "Box-A1",
+  sensor_type: string // "CO",
+  unit: string // "ppm",
+  name: string // "Carbon monoxide",
+  range_l: number // 0.0,
+  range_u: number // 1000.0,
+  longitude: number // -0.06507,
+  latitude: number // 51.51885,
+  reading: number // 917,
+  reading_ts: string // "2019-09-10T00:30:00"
+}
+
 function App() {
+  const [loading, setLoading] = useState(false)
+  const [records, setRecords] = useState([] as Record[])
+
+  useEffect(() => {
+    (async function fetchRecords () {
+      setLoading(true)
+
+      const response = await fetch('http://localhost:3000/data/sensor_readings.json')
+      const records = await response.json()
+
+      setRecords(records)
+      setLoading(false)
+    })()
+  }, [])
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Sensat take-home test 1</h1>
       </header>
+
+      {loading && <p>Loading...</p>}
+
       <DataTable
-        data={mockData}
+        data={records}
       >
         <Column
           field="box_id"
