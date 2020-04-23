@@ -7,6 +7,7 @@ import {
   DataTable,
 } from '../DataTable/DataTable'
 import './App.css'
+import Spinner from '../Spinner/Spinner'
 
 const mockData = [
   {"id": "Box-A1-O3", "box_id": "Box-A1", "sensor_type": "O3", "unit": "ppm", "name": "Ozone", "range_l": 0.0, "range_u": 1000.0, "longitude": -0.06507, "latitude": 51.51885, "reading": 672, "reading_ts": "2019-09-10T00:00:00"},
@@ -57,8 +58,13 @@ function App() {
       setLoading(true)
 
       const response = await fetch('http://localhost:3000/data/sensor_readings.json')
-      const records = await response.json()
+      const text = await response.text()
 
+      const records: Record[] = []
+      for(const line of text.split('\n')) {
+        records.push(JSON.parse(line))
+      }
+      console.log(records)
       setRecords(records)
       setLoading(false)
     })()
@@ -70,7 +76,7 @@ function App() {
         <h1>Sensat take-home test 1</h1>
       </header>
 
-      {loading && <p>Loading...</p>}
+      {loading && <Spinner />}
 
       <DataTable
         data={records}

@@ -19,6 +19,9 @@ Please see the notes at the end for the [original test spec](#spec).
     *  The docs on how to use the `jest-fetch-mock` in tests are full of confusion. Do you need to import it into the test set-up or not? Do you need to `enableFetchMocks()`? I settled on my individual test script importing lib.enableFetchMocks and running it explicitly. This seemed to make `fetchMock` available in the scope of the tests.
     *  Because the `useEffect()` callback is called immediately, and the useState setters get set after fetch returns, state updates happen after the simple render tests completes. This causes React to warn that we should use `act()`, but the docs for react-testing-library tell us we shouldn't need `act()` in most cases. They have two approaches: use the built in `waitforX` functions to wait for things like loading spinners to be removed, or mock the promise returned from the external API call. I tried the latter because I didn't want to get into rendering spinners at this point, but I couldn't get the shape/typing of the mock response correct. It had taken me about 3 hours of reading and testing different approaches because I wanted to learn how to do it, but in the end I gave up and added in a brittle spinner. I'm not convinced by react-testing-library yet. It makes hard things even harder. I get that I now have a test that proves my component responds to the API request and that is a "better reflection of live", but this test WILL break when I update the (currently text-only) spinner. This is the exact reason other frameworks advise NOT testing markup.
 
+11. Loading all 8000 records takes ages, even from localhost. It's several seconds!!
+
+
 ## Notes
 
 Specify allowed type of children: https://stackoverflow.com/questions/44475309/how-do-i-restrict-the-type-of-react-children-in-typescript-using-the-newly-adde/49408900#49408900
