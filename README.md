@@ -19,8 +19,28 @@ Please see the notes at the end for the [original test spec](#spec).
     *  The docs on how to use the `jest-fetch-mock` in tests are full of confusion. Do you need to import it into the test set-up or not? Do you need to `enableFetchMocks()`? I settled on my individual test script importing lib.enableFetchMocks and running it explicitly. This seemed to make `fetchMock` available in the scope of the tests.
     *  Because the `useEffect()` callback is called immediately, and the useState setters get set after fetch returns, state updates happen after the simple render tests completes. This causes React to warn that we should use `act()`, but the docs for react-testing-library tell us we shouldn't need `act()` in most cases. They have two approaches: use the built in `waitforX` functions to wait for things like loading spinners to be removed, or mock the promise returned from the external API call. I tried the latter because I didn't want to get into rendering spinners at this point, but I couldn't get the shape/typing of the mock response correct. It had taken me about 3 hours of reading and testing different approaches because I wanted to learn how to do it, but in the end I gave up and added in a brittle spinner. I'm not convinced by react-testing-library yet. It makes hard things even harder. I get that I now have a test that proves my component responds to the API request and that is a "better reflection of live", but this test WILL break when I update the (currently text-only) spinner. This is the exact reason other frameworks advise NOT testing markup.
 
-11. Loading all 8000 records takes ages, even from localhost. It's several seconds!!
+11. Loading all 8000 records takes ages, even from localhost. It's as much as seconds!! I assume it's more to do with parsing the JSON than the loading. A quick scan of the Performance panel didn't confirm this, but there's a really long task labelled "Promise Callback" which does a lot of garbage collecting, so my confidence rises. The worst of this is that it blocks the render process: even a loading spinner animated gif doesn't animate. Firefox reached the point of telling me my web page was slow and inviting me to refresh it. Something needs to be done. I suspect using a worker will free up the rendering, so at least we'll get the spinner. 
+12. I read around a little on workers and service workers. Both might help... but the former seems to be more direct. However, there was a lot to learn, so before I dived into that I double-checked where the slow-down was. Turns out, it's in rendering, not in parsing. If I do this:
+    
+        (async function fetchRecords () {
+          setLoading(true)
 
+          const response = await fetch('http://localhost:3000/data/sensor_readings.json')
+          const text = await response.text()
+
+          const records: Record[] = []
+          for(const line of text.split('\n')) {
+            records.push(JSON.parse(line))
+          }
+          console.log(records)
+          // setRecords(records)
+          setLoading(false)
+        })()
+
+    ... then the browser happily logs out an array 8000s items long, in no time at all. This is disappointing. 
+
+13. I know of two strategies for displaying large amounts of data: explicit pagination and virtualised rows (render enough rows to fit within the visible height plus one and then cycle as you scroll). The latter makes for a more modern-feeling UI (I'm hesitant to say "better": infinite scroll doesn't suit applications with footers, and makes it harder to answer "where am I?"). I don't fancy my chances of building an infinite scroll/virtualised rows implmeentation in a time-frame sane for this exercies. My choices are: roll my own pagination, use a plugin + recipe for virtualised rows. I've already started to build a datagrid, so I'm going to pick that one. It should allow me to show some TDD and one approach to problem solving. If I get really lost, I'll probably use [react-table](https://react-table.js.org): it looks like a handy blend of helpers for the data part, with hand-rolled mark-up (which would support using a UI library too). React-table also supports pagination and virtualised row style UI rendering: handy!
+14. 
 
 ## Notes
 

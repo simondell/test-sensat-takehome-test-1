@@ -16,5 +16,5 @@ test('displays Loading whilst it loads', async () => {
 
   expect(fetchMock).toHaveBeenCalled()
 
-  await waitForElementToBeRemoved(() => screen.getByText(/loading/i))
+  await waitForElementToBeRemoved(() => screen.getByAltText(/loading/i))
 })
