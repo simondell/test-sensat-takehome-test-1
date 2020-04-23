@@ -36,12 +36,12 @@ const mockData = [
 ]
 
 test('renders at max rows of the supplied data', () => {
-  const expectedRowCount = 10
+  const expectedpageSize = 10
 
   const tree = render(
     <DataGrid
       data={mockData}
-      rowCount={expectedRowCount}
+      pageSize={expectedpageSize}
     >
       <Column
         field="id"
@@ -51,14 +51,14 @@ test('renders at max rows of the supplied data', () => {
   )
 
   const rows = tree.getAllByRole('row')
-  expect(rows.length).toEqual(expectedRowCount + 1)
+  expect(rows.length).toEqual(expectedpageSize + 1)
 })
 
 test('pagination controls which page of rows to display', async () => {
   const tree = render(
     <DataGrid
       data={mockData}
-      rowCount={5}
+      pageSize={5}
     >
       <Column
         field="id"
@@ -87,7 +87,7 @@ test('Columns specify fields and fieldnames', () => {
   const tree = render(
     <DataGrid
       data={mockData}
-      rows={10}
+      pageSize={10}
     >
       <Column
         field="id"
@@ -114,3 +114,36 @@ test('Columns specify fields and fieldnames', () => {
   })
 })
 
+test('sort by column heading', async () => {
+  const tree = render(
+    <DataGrid
+      data={mockData}
+      pageSize={5}
+    >
+      <Column
+        field="id"
+        heading="Sensor ID"
+        sortable
+      />
+      <Column
+        field="reading"
+        heading="Reading"
+      />
+      <Column
+        field="reading_ts"
+        heading="Timestamp"
+      />
+    </DataGrid>
+  )
+
+  const sortBySensorId = tree.getByTitle(/Ascending sort by/i)
+  fireEvent.click(sortBySensorId)
+
+  // wait for pagination (implementation detail; brittle)
+  await waitForElement(() => tree.getByText(/prev/i))
+
+  expect(tree.getAllByText('Box-A1-CO').length).toEqual(2)
+  expect(tree.getAllByText('Box-A1-NO2').length).toEqual(2)
+  expect(tree.getAllByText('Box-A1-O3').length).toEqual(1)
+
+})

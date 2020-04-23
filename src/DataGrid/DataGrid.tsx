@@ -85,7 +85,7 @@ function bySpec (
 interface DataGridProps {
   children: React.ReactElement<ColumnProps>[] | React.ReactElement<ColumnProps>
   data: object[]
-  rowCount: number
+  pageSize: number
 }
 
 type SortSpec = [string, SortOrder]
@@ -116,8 +116,8 @@ export function DataGrid (props: DataGridProps) {
     ? [...props.data].sort(bySpec(sort))
     : [...props.data]
 
-  const rowStart = pageIndex * props.rowCount
-  const rows = sorted.slice(rowStart, rowStart + props.rowCount)
+  const rowStart = pageIndex * props.pageSize
+  const rows = sorted.slice(rowStart, rowStart + props.pageSize)
 
   return (
     <>
@@ -152,15 +152,18 @@ export function DataGrid (props: DataGridProps) {
         </tbody>
       </table>
 
-      {props.rowCount < props.data.length &&
+      {props.pageSize < props.data.length &&
         <div>
           <button
             disabled={pageIndex === 0}
             onClick={() => setPageIndex(pageIndex - 1)}
             type="button"
           >Prev</button>
+
+          <span>Page {pageIndex + 1} of {Math.ceil(props.data.length / props.pageSize)}</span>
+
           <button
-            disabled={pageIndex + 1 > props.data.length / props.rowCount}
+            disabled={pageIndex + 1 > props.data.length / props.pageSize}
             onClick={() => setPageIndex(pageIndex + 1)}
             type="button"
           >Next</button>
