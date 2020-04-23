@@ -4,8 +4,8 @@ import React, {
 } from 'react'
 import {
   Column,
-  DataTable,
-} from '../DataTable/DataTable'
+  DataGrid,
+} from '../DataGrid/DataGrid'
 import './App.css'
 import Spinner from '../Spinner/Spinner'
 
@@ -81,7 +81,7 @@ function App() {
       {loading && <Spinner />}
 
       {!loading &&
-        <DataTable
+        <DataGrid
           data={records}
         >
           <Column
@@ -106,7 +106,7 @@ function App() {
             heading="Date &amp; time"
             sortable
           />
-        </DataTable>
+        </DataGrid>
       }
     </div>
   )

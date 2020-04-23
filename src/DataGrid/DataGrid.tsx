@@ -82,7 +82,7 @@ function bySpec (
   }
 }
 
-interface DataTableProps {
+interface DataGridProps {
   children: React.ReactElement<ColumnProps>[] | React.ReactElement<ColumnProps>
   data: object[]
 }
@@ -90,7 +90,7 @@ interface DataTableProps {
 type SortSpec = [string, SortOrder]
 type SortSetting = SortSpec | null
 
-export function DataTable (props: DataTableProps) {
+export function DataGrid (props: DataGridProps) {
   const [sort, setSort] = useState(null as SortSetting)
 
   const columns = React.Children.map(
