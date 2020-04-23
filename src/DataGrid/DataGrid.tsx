@@ -1,7 +1,7 @@
 import React, {
   useState
 } from 'react'
-
+import './DataGrid.css'
 
 enum SortOrder {
   Ascending,
@@ -39,7 +39,9 @@ function SortableColumn (props: SortableColumnProps): React.ReactElement {
   }
 
   return (
-    <th>
+    <th
+      className="sortable"
+    >
       <span>{props.heading}</span>
       <button
         onClick={createClickHandler(SortOrder.Ascending)}
@@ -125,7 +127,9 @@ export function DataGrid (props: DataGridProps) {
 
   return (
     <>
-      <table>
+      <table
+        className="datagrid"
+      >
         <thead>
           <tr>{columns}</tr>
         </thead>
@@ -157,7 +161,9 @@ export function DataGrid (props: DataGridProps) {
       </table>
 
       {props.pageSize < props.data.length &&
-        <div>
+        <div
+          className="pagination"
+        >
           <button
             disabled={pageIndex === 0}
             onClick={() => setPageIndex(pageIndex - 1)}

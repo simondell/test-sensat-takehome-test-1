@@ -1,0 +1,77 @@
+.datagrid,
+.pagination {
+  --row-height: 22px;
+  --row-bg-odd: rgba(192,192,192,0.1);
+  --border-color: rgba(0,0,0,0.2);
+  --border-width: 1px;
+
+  width: 100%;
+  font-size: 12px;
+}
+
+/* borders */
+.datagrid {
+  border-collapse: collapse;
+}
+
+.datagrid tr,
+.datagrid th,
+.datagrid td {
+  border-width: 0;
+  border-color: var(--border-color);
+  border-style: solid;
+}
+
+.datagrid tbody tr {
+  border-top-width: var(--border-width);
+}
+
+.datagrid td + td,
+.datagrid th + th {
+  border-left-width: var(--border-width);
+}
+/* /borders */
+
+/* colours */
+.datagrid tbody tr:nth-child(2n+1) {
+  background-color: var(--row-bg-odd);
+}
+/* /colours */
+
+/* layout */
+.datagrid th {
+  height: calc(var(--row-height) * 2);
+}
+.datagrid td {
+  height: var(--row-height);
+}
+
+.datagrid th.sortable {
+  position: relative;
+}
+
+.datagrid button {
+  border: 0;
+  position: absolute;
+  right: 2px;
+  height: 20px;
+}
+
+.datagrid button[title^="Ascending"] {
+  top: 2px;
+}
+
+.datagrid button[title^="Descending"] {
+  bottom: 2px;
+}
+
+.datagrid td {
+  text-align: center;
+}
+
+.pagination {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: var(--row-height)
+}
