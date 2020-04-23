@@ -72,13 +72,13 @@ test('pagination controls which page of rows to display', async () => {
     </DataGrid>
   )
 
-  const forward = tree.getByText(/next/i)
+  const forward = tree.getByTitle(/next/i)
   fireEvent.click(forward)
   fireEvent.click(forward)
   const boxB1 = await waitForElement(() => tree.getByText('Box-B1-O3'))
   expect(boxB1).toBeInTheDocument()
 
-  const backwards = tree.getByText(/prev/i)
+  const backwards = tree.getByTitle(/prev/i)
   fireEvent.click(backwards)
   const boxA2 = await waitForElement(() => tree.getByText('Box-A2-O3'))
   expect(boxA2).toBeInTheDocument()
@@ -141,7 +141,7 @@ test('sort by column heading', async () => {
   fireEvent.click(sortBySensorId)
 
   // wait for pagination (implementation detail; brittle)
-  await waitForElement(() => tree.getByText(/prev/i))
+  await waitForElement(() => tree.getByTitle(/prev/i))
 
   expect(tree.getAllByText('Box-A1-CO').length).toEqual(2)
   expect(tree.getAllByText('Box-A1-NO2').length).toEqual(2)
@@ -176,7 +176,7 @@ test('clear sort by clicking sort button a second time', async () => {
   fireEvent.click(sortBySensorId)
 
   // wait for pagination (implementation detail; brittle)
-  await waitForElement(() => tree.getByText(/prev/i))
+  await waitForElement(() => tree.getByTitle(/prev/i))
 
   const expectedIds = mockData
     .splice(0, pageSize)

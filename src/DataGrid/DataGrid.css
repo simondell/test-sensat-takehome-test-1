@@ -38,6 +38,12 @@
 .datagrid th + th {
   border-left-width: var(--border-width);
 }
+
+.datagrid button,
+.pagination button {
+  border: 0;
+  border-radius: 2px;
+}
 /* /borders */
 
 /* colours */
@@ -47,7 +53,6 @@
 
 .datagrid button,
 .pagination button {
-  border-radius: 2px;
   color: var(--border-color);
 }
 
@@ -58,6 +63,14 @@
   color: var(--icon-active);
   fill: var(--icon-active);
 }
+
+.datagrid button:disabled,
+.pagination button:disabled {
+  background-color: transparent;
+  color: var(--border-color);
+  fill: var(--border-color);
+}
+
 /* /colours */
 
 /* layout + sizes */
@@ -72,14 +85,22 @@
   position: relative;
 }
 
-.datagrid button {
-  border: 0;
+.datagrid button,
+.pagination button {
   height: calc(var(--grid) * 4);
-  position: absolute;
   overflow: hidden;
   padding: 0;
-  right: 3px;
   width: calc(var(--grid) * 4);
+}
+
+.datagrid button {
+  position: absolute;
+  right: 3px;
+}
+
+.pagination button {
+  margin-left: 1ex;
+  margin-right: 1ex;
 }
 
 .datagrid button[title^="Ascending"] {
@@ -100,3 +121,4 @@
   justify-content: center;
   height: var(--row-height)
 }
+

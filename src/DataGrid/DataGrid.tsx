@@ -2,8 +2,12 @@ import React, {
   useState
 } from 'react'
 import './DataGrid.css'
-import { ReactComponent as UpArrow } from './arrow_up-24px.svg'
 import { ReactComponent as DownArrow } from './arrow_down-24px.svg'
+import { ReactComponent as LeftArrow } from './arrow_left-24px.svg'
+import { ReactComponent as RightArrow } from './arrow_right-24px.svg'
+import { ReactComponent as UpArrow } from './arrow_up-24px.svg'
+
+const iconSize = 16
 
 enum SortOrder {
   Ascending,
@@ -59,8 +63,8 @@ function SortableColumn (props: SortableColumnProps): React.ReactElement {
         type="button"
       >
         <UpArrow
-          height={16}
-          width={16}
+          height={iconSize}
+          width={iconSize}
         />
       </button>
       <button
@@ -192,16 +196,28 @@ export function DataGrid (props: DataGridProps) {
           <button
             disabled={pageIndex === 0}
             onClick={() => setPageIndex(pageIndex - 1)}
+            title="Previous page"
             type="button"
-          >Prev</button>
+          >
+            <LeftArrow
+              height={iconSize}
+              width={iconSize}
+            />
+          </button>
 
           <span>Page {pageIndex + 1} of {Math.ceil(props.data.length / props.pageSize)}</span>
 
           <button
             disabled={pageIndex + 1 > props.data.length / props.pageSize}
             onClick={() => setPageIndex(pageIndex + 1)}
+            title="Next page"
             type="button"
-          >Next</button>
+          >
+            <RightArrow
+              height={iconSize}
+              width={iconSize}
+            />
+          </button>
         </div>
       }
     </>
