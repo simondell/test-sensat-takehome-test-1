@@ -68,6 +68,7 @@ function App() {
       if(process.env.NODE_ENV === 'development') {
         console.log(sourceRecords)
       }
+      setRecords(sourceRecords)
       setLoading(false)
     })()
   }, [])
@@ -82,7 +83,7 @@ function App() {
 
       {!loading &&
         <DataGrid
-          data={mockData}
+          data={records}
           pageSize={10}
         >
           <Column
