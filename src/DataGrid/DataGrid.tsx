@@ -2,6 +2,8 @@ import React, {
   useState
 } from 'react'
 import './DataGrid.css'
+import { ReactComponent as UpArrow } from './arrow_up-24px.svg'
+import { ReactComponent as DownArrow } from './arrow_down-24px.svg'
 
 enum SortOrder {
   Ascending,
@@ -30,8 +32,11 @@ export function Column (props: ColumnProps): React.ReactElement {
 }
 
 function SortableColumn (props: SortableColumnProps): React.ReactElement {
+  const sortingByField = props.sort && props.sort[0] === props.field
+  const sortDirection = props.sort && props.sort[1]
+
   function createClickHandler (direction: SortOrder) {
-    if(props.sort && props.sort[0] === props.field) {
+    if(sortingByField && direction === sortDirection) {
       return () => { props.setSort(null) }
     }
 
@@ -44,15 +49,35 @@ function SortableColumn (props: SortableColumnProps): React.ReactElement {
     >
       <span>{props.heading}</span>
       <button
+        className={
+          sortingByField && sortDirection === SortOrder.Ascending
+            ? 'active'
+            : ''
+        }
         onClick={createClickHandler(SortOrder.Ascending)}
         title={`Ascending sort by ${props.field}`}
         type="button"
-      >🔼</button>
+      >
+        <UpArrow
+          height={16}
+          width={16}
+        />
+      </button>
       <button
+        className={
+          sortingByField && sortDirection === SortOrder.Descending
+            ? 'active'
+            : ''
+        }
         onClick={createClickHandler(SortOrder.Descending)}
         title={`Descending sort by ${props.field}`}
         type="button"
-      >🔽</button>
+      >
+        <DownArrow
+          height={16}
+          width={16}
+        />
+      </button>
     </th>
   )
 }

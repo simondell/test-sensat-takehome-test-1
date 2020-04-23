@@ -1,12 +1,20 @@
 .datagrid,
 .pagination {
-  --row-height: 22px;
-  --row-bg-odd: rgba(192,192,192,0.1);
-  --border-color: rgba(0,0,0,0.2);
+  /* sizes */
+  --grid: 4px;
+  --row-height: calc(var(--grid) * 5);
   --border-width: 1px;
+  --text-size: calc(var(--grid) * 3);
 
+  /* colors */
+  --foreground: rgba(0,0,0,0.9);
+  --icon-active: rgb(177, 188, 131);
+  --border-color: rgba(0,0,0,0.2);
+  --row-bg-odd: rgba(192,192,192,0.1);
+
+  color: var(--foreground);
   width: 100%;
-  font-size: 12px;
+  font-size: var(--text-size);
 }
 
 /* borders */
@@ -36,9 +44,23 @@
 .datagrid tbody tr:nth-child(2n+1) {
   background-color: var(--row-bg-odd);
 }
+
+.datagrid button,
+.pagination button {
+  border-radius: 2px;
+  color: var(--border-color);
+}
+
+.datagrid button:hover,
+.pagination button:hover,
+.datagrid button.active,
+.pagination button.active {
+  color: var(--icon-active);
+  fill: var(--icon-active);
+}
 /* /colours */
 
-/* layout */
+/* layout + sizes */
 .datagrid th {
   height: calc(var(--row-height) * 2);
 }
@@ -52,17 +74,20 @@
 
 .datagrid button {
   border: 0;
+  height: calc(var(--grid) * 4);
   position: absolute;
-  right: 2px;
-  height: 20px;
+  overflow: hidden;
+  padding: 0;
+  right: 3px;
+  width: calc(var(--grid) * 4);
 }
 
 .datagrid button[title^="Ascending"] {
-  top: 2px;
+  top: 3px;
 }
 
 .datagrid button[title^="Descending"] {
-  bottom: 2px;
+  bottom: 3px;
 }
 
 .datagrid td {
