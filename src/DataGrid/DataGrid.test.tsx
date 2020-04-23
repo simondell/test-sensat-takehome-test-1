@@ -1,14 +1,14 @@
-import React from 'react';
+import React from 'react'
 import {
   fireEvent,
   render,
   screen,
   waitForElement
-} from '@testing-library/react';
+} from '@testing-library/react'
 import {
   Column,
   DataGrid,
-} from './DataGrid';
+} from './DataGrid'
 
 const mockData = [
   {"id": "Box-A1-O3", "box_id": "Box-A1", "sensor_type": "O3", "unit": "ppm", "name": "Ozone", "range_l": 0.0, "range_u": 1000.0, "longitude": -0.06507, "latitude": 51.51885, "reading": 672, "reading_ts": "2019-09-10T00:00:00"},
