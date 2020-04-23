@@ -82,7 +82,8 @@ function App() {
 
       {!loading &&
         <DataGrid
-          data={records}
+          data={mockData}
+          rowCount={10}
         >
           <Column
             field="box_id"

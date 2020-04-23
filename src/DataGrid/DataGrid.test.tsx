@@ -1,5 +1,9 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  waitForElement
+} from '@testing-library/react';
 import {
   Column,
   DataGrid,
@@ -31,21 +35,59 @@ const mockData = [
   {"id": "Box-A1-CO", "box_id": "Box-A1", "sensor_type": "CO", "unit": "ppm", "name": "Carbon monoxide", "range_l": 0.0, "range_u": 1000.0, "longitude": -0.06507, "latitude": 51.51885, "reading": 917, "reading_ts": "2019-09-10T00:30:00"},
 ]
 
-test('renders a row per entry in the supplied data', () => {
+test('renders at max rows of the supplied data', () => {
+  const expectedRowCount = 10
+
   const tree = render(
     <DataGrid
       data={mockData}
-    />
+      rowCount={expectedRowCount}
+    >
+      <Column
+        field="id"
+        heading="Sensor ID"
+      />
+    </DataGrid>
   )
 
   const rows = tree.getAllByRole('row')
-  expect(rows.length).toEqual(mockData.length + 1)
+  expect(rows.length).toEqual(expectedRowCount + 1)
+})
+
+test('pagination controls which page of rows to display', async () => {
+  const tree = render(
+    <DataGrid
+      data={mockData}
+      rowCount={5}
+    >
+      <Column
+        field="id"
+        heading="Sensor ID"
+      />
+      <Column
+        field="reading"
+        heading="Reading"
+      />
+    </DataGrid>
+  )
+
+  const forward = tree.getByText(/next/i)
+  fireEvent.click(forward)
+  fireEvent.click(forward)
+  const boxB1 = await waitForElement(() => tree.getByText('Box-B1-O3'))
+  expect(boxB1).toBeInTheDocument()
+
+  const backwards = tree.getByText(/prev/i)
+  fireEvent.click(backwards)
+  const boxA2 = await waitForElement(() => tree.getByText('Box-A2-O3'))
+  expect(boxA2).toBeInTheDocument()
 })
 
 test('Columns specify fields and fieldnames', () => {
   const tree = render(
     <DataGrid
       data={mockData}
+      rows={10}
     >
       <Column
         field="id"

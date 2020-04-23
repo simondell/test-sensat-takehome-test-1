@@ -85,6 +85,7 @@ function bySpec (
 interface DataGridProps {
   children: React.ReactElement<ColumnProps>[] | React.ReactElement<ColumnProps>
   data: object[]
+  rowCount: number
 }
 
 type SortSpec = [string, SortOrder]
@@ -107,45 +108,64 @@ export function DataGrid (props: DataGridProps) {
       : child
   )
 
-  let sortedData
-  if(sort) {
-    sortedData = [...props.data]
-    sortedData.sort(bySpec(sort))
-  }
-  else {
-    sortedData = props.data
-  }
+  // Pagination
+  const [pageIndex, setPageIndex] = useState(0)
+
+  // set up data to display
+  const sorted = sort
+    ? [...props.data].sort(bySpec(sort))
+    : [...props.data]
+
+  const rowStart = pageIndex * props.rowCount
+  const rows = sorted.slice(rowStart, rowStart + props.rowCount)
 
   return (
-    <table>
-      <thead>
-        <tr>{columns}</tr>
-      </thead>
-      <tbody>
-      {
-        sortedData.map((row: any, rowIndex:  number) =>
-          <tr
-            key={`${row.id}-${row.reading_ts}`}
-          >
-          {
-            columns && 
-            columns.map(column => {
-              const { field } = column.props
-              return (
-                <td
-                  key={`cell-${rowIndex}-${field}`}
-                >
-                {
-                  row[field]
-                }
-                </td>
-              )
-            })
-          }
-          </tr>
-        )
+    <>
+      <table>
+        <thead>
+          <tr>{columns}</tr>
+        </thead>
+        <tbody>
+        {
+          rows.map((row: any, rowIndex:  number) =>
+            <tr
+              key={`${row.id}-${row.reading_ts}`}
+            >
+            {
+              columns && 
+              columns.map(column => {
+                const { field } = column.props
+                return (
+                  <td
+                    key={`cell-${rowIndex}-${field}`}
+                  >
+                  {
+                    row[field]
+                  }
+                  </td>
+                )
+              })
+            }
+            </tr>
+          )
+        }
+        </tbody>
+      </table>
+
+      {props.rowCount < props.data.length &&
+        <div>
+          <button
+            disabled={pageIndex === 0}
+            onClick={() => setPageIndex(pageIndex - 1)}
+            type="button"
+          >Prev</button>
+          <button
+            disabled={pageIndex + 1 > props.data.length / props.rowCount}
+            onClick={() => setPageIndex(pageIndex + 1)}
+            type="button"
+          >Next</button>
+        </div>
       }
-      </tbody>
-    </table>
+    </>
   )
 }
