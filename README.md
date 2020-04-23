@@ -40,7 +40,7 @@ Please see the notes at the end for the [original test spec](#spec).
     ... then the browser happily logs out an array 8000s items long, in no time at all. This is disappointing. 
 
 13. I know of two strategies for displaying large amounts of data: explicit pagination and virtualised rows (render enough rows to fit within the visible height plus one and then cycle as you scroll). The latter makes for a more modern-feeling UI (I'm hesitant to say "better": infinite scroll doesn't suit applications with footers, and makes it harder to answer "where am I?"). I don't fancy my chances of building an infinite scroll/virtualised rows implmeentation in a time-frame sane for this exercies. My choices are: roll my own pagination, use a plugin + recipe for virtualised rows. I've already started to build a datagrid, so I'm going to pick that one. It should allow me to show some TDD and one approach to problem solving. If I get really lost, I'll probably use [react-table](https://react-table.js.org): it looks like a handy blend of helpers for the data part, with hand-rolled mark-up (which would support using a UI library too). React-table also supports pagination and virtualised row style UI rendering: handy!
-14. 
+14. Adding pagination took a while longer than hoped. I preferred to do this rather than using a plugin. I'm aiming for senior status. I need to demonstrate a balance of "can do it hands on" and "pragmatically choosing 3rd party help". I feel the map and chart parts of this call on the second skill, and I need to show some ability to do the former.
 
 ## Notes
 
