@@ -102,7 +102,10 @@ export function DataGrid (props: DataGridProps) {
           field={child.props.field}
           heading={child.props.heading}
           sort={sort as SortSpec}
-          setSort={setSort}
+          setSort={spec => {
+            setPageIndex(0)
+            setSort(spec)
+          }}
         />
       )
       : child

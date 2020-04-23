@@ -2,6 +2,7 @@ import React from 'react';
 import {
   fireEvent,
   render,
+  screen,
   waitForElement
 } from '@testing-library/react';
 import {
@@ -145,5 +146,43 @@ test('sort by column heading', async () => {
   expect(tree.getAllByText('Box-A1-CO').length).toEqual(2)
   expect(tree.getAllByText('Box-A1-NO2').length).toEqual(2)
   expect(tree.getAllByText('Box-A1-O3').length).toEqual(1)
+})
 
+test('clear sort by clicking sort button a second time', async () => {
+  const pageSize = 5
+  const tree = render(
+    <DataGrid
+      data={mockData}
+      pageSize={pageSize}
+    >
+      <Column
+        field="id"
+        heading="Sensor ID"
+        sortable
+      />
+      <Column
+        field="reading"
+        heading="Reading"
+      />
+      <Column
+        field="reading_ts"
+        heading="Timestamp"
+      />
+    </DataGrid>
+  )
+
+  const sortBySensorId = tree.getByTitle(/Ascending sort by/i)
+  fireEvent.click(sortBySensorId)
+  fireEvent.click(sortBySensorId)
+
+  // wait for pagination (implementation detail; brittle)
+  await waitForElement(() => tree.getByText(/prev/i))
+
+  const expectedIds = mockData
+    .splice(0, pageSize)
+    .map(reading => reading.id)
+
+  for(const id of expectedIds) {
+    expect(tree.getByText(id)).toBeInTheDocument()
+  }
 })
