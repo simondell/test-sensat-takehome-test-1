@@ -60,12 +60,14 @@ function App() {
       const response = await fetch('http://localhost:3000/data/sensor_readings.json')
       const text = await response.text()
 
-      const records: Record[] = []
+      const sourceRecords: Record[] = []
       for(const line of text.split('\n')) {
-        records.push(JSON.parse(line))
+        sourceRecords.push(JSON.parse(line))
       }
-      console.log(records)
-      setRecords(records)
+
+      if(process.env.NODE_ENV === 'development') {
+        console.log(sourceRecords)
+      }
       setLoading(false)
     })()
   }, [])
@@ -78,32 +80,34 @@ function App() {
 
       {loading && <Spinner />}
 
-      <DataTable
-        data={records}
-      >
-        <Column
-          field="box_id"
-          heading="Box"
-        />
-        <Column
-          field="sensor_type"
-          heading="Sensor"
-          sortable
-        />
-        <Column
-          field="reading"
-          heading="reading"
-        />
-        <Column
-          field="unit"
-          heading="unit"
-        />
-        <Column
-          field="reading_ts"
-          heading="Date &amp; time"
-          sortable
-        />
-      </DataTable>
+      {!loading &&
+        <DataTable
+          data={records}
+        >
+          <Column
+            field="box_id"
+            heading="Box"
+          />
+          <Column
+            field="sensor_type"
+            heading="Sensor"
+            sortable
+          />
+          <Column
+            field="reading"
+            heading="reading"
+          />
+          <Column
+            field="unit"
+            heading="unit"
+          />
+          <Column
+            field="reading_ts"
+            heading="Date &amp; time"
+            sortable
+          />
+        </DataTable>
+      }
     </div>
   )
 }
