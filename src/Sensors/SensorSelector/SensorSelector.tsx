@@ -65,12 +65,12 @@ function SensorSelector (props: SensorSelectorProps) {
           zoom={4}
         >
         {
-          props.sensors.map(sensor =>
+          boxes.map(box =>
             <Marker
-              // name={sensor.box_id}
+              key={box.box_id}
               position={{
-                lat: sensor.latitude,
-                lng: sensor.longitude,
+                lat: box.latitude,
+                lng: box.longitude,
               }}
             />
           )
