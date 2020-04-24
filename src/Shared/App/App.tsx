@@ -29,7 +29,8 @@ function App() {
     (async function fetchRecords () {
       setLoading(true)
 
-      const response = await fetch('http://localhost:3000/data/sensor_readings.json')
+      const url = `${process.env.REACT_APP_DATA_HOST}/data/sensor_readings.json`
+      const response = await fetch(url)
       const text = await response.text()
 
       const sourceRecords: Record[] = []
