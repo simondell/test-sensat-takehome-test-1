@@ -84,7 +84,7 @@ function App() {
       {!loading &&
         <DataGrid
           data={records}
-          pageSize={10}
+          pageSize={15}
         >
           <Column
             field="box_id"
