@@ -6,7 +6,10 @@ import {
   Column,
   DataGrid,
 } from '../DataGrid/DataGrid'
-import SensorSelector from '../../Sensors/SensorSelector/SensorSelector'
+import SensorSelector, {
+  Box,
+  Sensor,
+} from '../../Sensors/SensorSelector/SensorSelector'
 import './App.css'
 import Spinner from '../Spinner/Spinner'
 
@@ -36,19 +39,26 @@ const mockData = [
   {"id": "Box-A1-CO", "box_id": "Box-A1", "sensor_type": "CO", "unit": "ppm", "name": "Carbon monoxide", "range_l": 0.0, "range_u": 1000.0, "longitude": -0.06507, "latitude": 51.51885, "reading": 917, "reading_ts": "2019-09-10T00:30:00"},
 ]
 
-interface Record {
+// interface Record {
+//   id: string // "Box-A1-CO",
+//   box_id: string // "Box-A1",
+//   sensor_type: string // "CO",
+//   unit: string // "ppm",
+//   name: string // "Carbon monoxide",
+//   range_l: number // 0.0,
+//   range_u: number // 1000.0,
+//   longitude: number // -0.06507,
+//   latitude: number // 51.51885,
+//   reading: number // 917,
+//   reading_ts: string // "2019-09-10T00:30:00"
+// }
+interface Reading {
   id: string // "Box-A1-CO",
-  box_id: string // "Box-A1",
-  sensor_type: string // "CO",
-  unit: string // "ppm",
-  name: string // "Carbon monoxide",
-  range_l: number // 0.0,
-  range_u: number // 1000.0,
-  longitude: number // -0.06507,
-  latitude: number // 51.51885,
   reading: number // 917,
   reading_ts: string // "2019-09-10T00:30:00"
 }
+
+type Record = Box & Sensor & Reading
 
 function App() {
   const [loading, setLoading] = useState(false)
@@ -82,7 +92,9 @@ function App() {
         <h1>Sensat take-home test 1</h1>
       </header>
 
-      <SensorSelector />
+      <SensorSelector
+        sensors={records}
+      />
 
       <section>
         <h2>Readings</h2>
