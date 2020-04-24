@@ -6,6 +6,7 @@ import {
   Marker,
 } from 'google-maps-react'
 import Spinner from '../../Shared/Spinner/Spinner'
+import './SensorSelector.css'
 
 interface SensorSelectorProps {
   google: typeof google
@@ -13,12 +14,19 @@ interface SensorSelectorProps {
 
 function SensorSelector (props: SensorSelectorProps) {
   return (
-    <section>
+    <section
+      className="sensor-selector"
+    >
       <h2>Sensor Selector</h2>
       <div
-        id="map-wrapper"
+        className="map-wrapper"
       >
         <Map google={props.google} />
+      </div>
+
+      <div
+        className="box-data"
+      >
       </div>
     </section>
   )
