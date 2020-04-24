@@ -6,6 +6,7 @@ import {
   Column,
   DataGrid,
 } from '../DataGrid/DataGrid'
+import SensorSelector from '../../Sensors/SensorSelector/SensorSelector'
 import './App.css'
 import Spinner from '../Spinner/Spinner'
 
@@ -73,15 +74,18 @@ function App() {
     })()
   }, [])
 
+  if(loading) return <Spinner />
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Sensat take-home test 1</h1>
       </header>
 
-      {loading && <Spinner />}
+      <SensorSelector />
 
-      {!loading &&
+      <section>
+        <h2>Readings</h2>
         <DataGrid
           data={records}
           pageSize={15}
@@ -109,7 +113,7 @@ function App() {
             sortable
           />
         </DataGrid>
-      }
+      </section>
     </div>
   )
 }
