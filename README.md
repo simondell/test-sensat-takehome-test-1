@@ -2,6 +2,42 @@
 
 Please see the notes at the end for the [original test spec](#spec).
 
+You can view a running instance of the solution here: https://sensat-test.theotherdell.com.theotherdell.com/
+
+To build and develop locally, follow this workflow, typical of <dfn>create-react-app (<acronym title="create react app">CRA</acronym>)</dfn> derrived apps:
+
+```bash
+git clone https://github.com/simondell/test-sensat-takehome-test-1
+cd test-sensat-takehome-test-1
+npm install
+```
+
+You'll need to register your own Google API key and store it in a file called `.env.local` at the root of the application. Follow this format:
+
+```
+REACT_APP_DATA_HOST=http://localhost:3000
+REACT_APP_GOOGLE_API_KEY=your_key_here
+```
+
+Now, run this:
+
+```bash
+npm start
+```
+
+... and visit [http://localhost:3000]() to view the example locally.
+
+The application uses create-react-app to scaffold a development and build environment. It's configured to expect typescript; the source and tests are all in typescript. The CSS is plain ol' CSS, and built with the standard webpack configuration supplied by CRA.
+
+I chose React and CSS because I know them well. I've used SASS, Less, material-ui, and Bulma in the past. I've only had bad experiences with CSS-in-JS so far, and whilst newer solutions like style-components and JSS are popular and seem better than what I've used before, I didn't want to take the time to learn them at this stage.
+
+You'll see a data-grid, with sortable columns. And a map. I got bogged down and decided to stop at this point:
+
+- I was aiming for and UI that initiated record filtering when clicking a map pin. However, I discovered only when I reacted the point of developing the pin selection that all the lat/longs are the same, rendering no difference between the boxes. I should look at the data earlier.
+- adding a map (via google-maps-react) broke all my tests. it introduces out-of-lifecycle rendering and I felt too rushed by this point to work out how to reconfigure my tests to support it. This seems a disadvantage of react-testing-library's "mostly integration" philosophy over the "mostly unit tests" flow I've used before. I'm on the fence here...
+
+
+
 ## Decision log
 
 1. I shall use React, rather than Angular. I havn't used Angular since v1.4ish, >5 years ago. I have used React extensively. I don't have time nor the will to learn modern Angular to production level for this test; also the internal recruiter seemed content to accept a React-based solution
