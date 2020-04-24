@@ -62,7 +62,7 @@ function SensorSelector (props: SensorSelectorProps) {
             lng: -0.09
           }}
           google={props.google}
-          zoom={4}
+          zoom={8}
         >
         {
           boxes.map(box =>
